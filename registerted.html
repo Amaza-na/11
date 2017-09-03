@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+<script type="text/javascript" src="js/html5shiv.js"></script>
+<script type="text/javascript" src="js/respond.min.js"></script>
+<![endif]-->
+		<link rel="stylesheet" type="text/css" href="css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/fx.css" />
+		<link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_346535_3as793752pdgqfr.css" />
+		<!--[if lt IE 9]>
+<link href="css/H-ui.ie.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+		<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+		<style type="text/css">
+			.ui-sortable .panel-header {
+				cursor: move
+			}
+		</style>
+		<title>注册</title>
+		<meta name="keywords" content="FX方程式">
+		<meta name="description" content="FX方程式">
+	</head>
+
+	<body class="regbg">
+		<div class="regform">
+
+			<ul>
+				<li>
+					<label><i class="icon iconfont icon-dianhua"></i></label>
+					<input type="text" name="phone" id="phone" value="" placeholder="请输入手机号码" />
+				</li>
+				<li>
+					<label><i class="icon iconfont icon-tubiaozhizuomoban"></i></label>
+					<input type="text" name="code" id="code" value="" placeholder="请输入验证码" />
+					<button class="codebtn btn-primary-outline btn radius" >获取短信验证码</button>
+				</li>
+				<li style="margin-top: 40px;">
+					<label><i class="icon iconfont icon-suokongxinkaisuo"></i></label>
+					<input type="password" name="password" id="password" value="" placeholder="请设置长度6-20位字符密码" />
+				</li>
+				<li>
+					<label><i class="icon iconfont icon-suokongxinkaisuo"></i></label>
+					<input type="password" name="passok" id="passok" value="" placeholder="请确认密码" />
+				</li>
+				<li style="height: 72px;">
+					<!--<input type="submit" name="regbtn" id="regbtn" value="注册" />-->
+					<button id="regbtn" onclick="validation()">注册</button>
+				</li>
+			</ul>
+			<!--<input type="submit" value=""/>-->
+
+			<div class="copyright">
+				<i class="icon iconfont icon-iconlistjinyong"></i>不会再任何场合泄露你的信息
+			</div>
+
+		</div>
+
+		
+
+	</body>
+	<script type="text/javascript" src="lib\jquery\1.9.1\jquery.min.js"></script>
+	<script type="text/javascript" src="js/H-ui.js"></script>
+	<script type="text/javascript">
+		var timer = null;
+		function myTimeout(this_) {
+			var second = 60;
+			timer = setInterval(function() {
+				second -= 1;
+				if(second > 0) {
+					$(this_).text(second + "秒后重新获取");
+					$(this_).disabled = true; //可以被点击
+					$(this_).addClass("disabled "); //this不能被点击了，点击失效
+				} else {
+					clearInterval(timer);
+					timer = null;
+					$(this_).text("获取验证码");
+					$(this_).disabled = false; //可以被点击
+					$(this_).removeClass("disabled"); //this不能被点击了，点击失效
+				}
+			}, 1000);
+		}
+        
+        /*表单非空验证*/
+		function trim(str) {
+			return str.replace(/(^\s*)|(\s*$)/g, "");
+		}
+        function validation() {
+        	var phone = $("input[name='phone']").val();
+	        var code = $("input[name='code']").val();
+	        var pass = $("input[name='password']").val();
+	        var passOk = $("input[name='passok']").val();
+	        if(trim(phone) == '') {
+	        	$.Huimodalalert('请输入手机号码！',3000)
+	        	return false;
+	        }
+	        if(!(/^1[3|4|5|7|8]\d{9}$/.test(phone))) {
+				$.Huimodalalert('请填写合法的手机号！',3000)
+				return false;
+			}
+	        if (trim(code) == '') {
+	        	$.Huimodalalert('请填写验证码！',3000)
+	        	return false;
+	        }
+	        if (trim(pass) == '') {
+	        	$.Huimodalalert('请输入密码！',3000)
+	        	return false;
+	        }
+	        if (pass.length < 6 || pass.length > 20) {
+	        	$.Huimodalalert('密码长度最多不少于6个，最大不超过20个！',3000);
+	        	return false;
+	        }
+	        var reg = /^[0-9a-zA-Z]+$/;
+	        if(!reg.test(pass)){
+			   $.Huimodalalert('密码只能是数字和字母组成！',3000);
+			   return false;
+			}
+	        if (trim(passOk) == '') {
+	        	$.Huimodalalert('您还没有确认您的密码',3000)
+	        	return false;
+	        }
+	        if (pass!=passOk) {
+	        	$.Huimodalalert('两次输入密码不一致',3000)
+	        	return false;
+	        }
+        }
+        
+		
+		$(function() {
+			
+			$("body").height($(window).height());
+			$("body").width($(window).width());
+
+			$("body").on("click", ".codebtn", function() {
+				if(timer == null) {
+					myTimeout(this);
+					return;
+				}
+			});
+
+		})
+	</script>
+
+</html>
